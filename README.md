@@ -7,14 +7,10 @@ It features both encoding and decoding on input files. The decoding algorithm on
 
 ## Technology
 * C++20
-* Modules
 * Threads and guard locks
 
 ## Build
-This was built with MS Visual Studio. It currently uses the modules experimental feature. Please make sure that's enabled when building.
-
-## Todo
-This project will be updated with CMake in the future, and it will likely use headers instead of modules for that update. Tests and benchmarks will be added to the code and documentation as well.
+This project was built with MS Visual Studio. It will be updated with CMake in the future. Tests and benchmarks will be added to the code and documentation as well.
 
 ## Usage
 ```
