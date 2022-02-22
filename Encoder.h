@@ -1,4 +1,4 @@
-module;
+#pragma once
 
 #include <mutex>
 #include <queue>
@@ -7,10 +7,8 @@ module;
 #include <unordered_map>
 #include <vector>
 
-export module Encoder;
-
 namespace mk {
-	export class Encoder {
+	class Encoder {
 	public:
 		Encoder(std::string, std::string);
 		void read_file();

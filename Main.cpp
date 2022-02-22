@@ -1,9 +1,8 @@
 #include <chrono>
+#include "Encoder.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-
-import Encoder;
 
 void print_duration(std::chrono::steady_clock::time_point start,
 	std::chrono::steady_clock::time_point end)

@@ -1,12 +1,8 @@
-module;
-
 #include <filesystem>
 #include <fstream>
-#include <gsl/gsl-lite.hpp>
 #include <iostream>
 #include <mutex>
-
-module Encoder;
+#include "Encoder.h"
 
 namespace mk {
 
@@ -27,12 +23,11 @@ namespace mk {
 				m_threads.push_back(std::jthread(&Encoder::encode, this));
 			}
 			for (int i = 0; i < m_threads.size(); ++i) {
-				gsl::at(m_threads, i).join();
+				m_threads[i].join();
 			}
 			stitch();
 		}
-		else {
-			// If a single thread is detected, skip thread creation.
+		else { // If a single thread is detected, skip thread creation.
 			split();
 			encode();
 		}
@@ -90,7 +85,7 @@ namespace mk {
 		}
 
 		auto count = 0;
-		auto tmp = gsl::at(s, 0);
+		auto tmp = s[0];
 		std::vector<int> tmp_num_vec{};
 		std::vector<char> tmp_char_vec{};
 		tmp_num_vec.clear();
@@ -157,8 +152,8 @@ namespace mk {
 				const auto inner_size = tmp_nums.size();
 
 				for (int j = 0; j < inner_size; ++j) {
-					output.write(reinterpret_cast<char*>(&gsl::at(tmp_nums, j)), sizeof(int));
-					output.write(reinterpret_cast<char*>(&gsl::at(tmp_chars, j)), sizeof(char));
+					output.write(reinterpret_cast<char*>(&tmp_nums[j]), sizeof(int));
+					output.write(reinterpret_cast<char*>(&tmp_chars[j]), sizeof(char));
 
 				}
 			}
