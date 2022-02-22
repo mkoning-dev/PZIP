@@ -1,5 +1,5 @@
-#include "Encoder.h"
 #include "Decoder.h"
+#include "Encoder.h"
 #include "File_IO.h"
 #include <chrono>
 

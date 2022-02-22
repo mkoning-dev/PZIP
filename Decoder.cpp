@@ -1,6 +1,6 @@
 #include "Decoder.h"
-#include <fstream>
 #include <format>
+#include <fstream>
 
 namespace mk {
 	void decode(std::string input_filename)
