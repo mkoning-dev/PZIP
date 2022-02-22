@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <mutex>
 #include <queue>
 #include <semaphore>
@@ -10,12 +11,12 @@
 namespace mk {
 	class Encoder {
 	public:
-		Encoder(std::string, std::string);
-		void read_file();
+		Encoder(std::string, std::string, bool);
 		void split();
 		void encode();
 		void stitch();
-		void write_file();
+		std::unordered_map<int, std::vector<char>> get_chars();
+		std::unordered_map<int, std::vector<int>> get_nums();
 
 	private:
 		// User provided filename.
@@ -28,7 +29,7 @@ namespace mk {
 		std::unordered_map<int, std::vector<int>> m_nums;
 
 		// Stores chunks to be processed by threads.
-		std::queue<std::tuple<int, std::string>> work;
+		std::queue<std::pair<int, std::string>> work;
 
 		// Thread related members.
 		unsigned int m_max_threads = std::thread::hardware_concurrency();
