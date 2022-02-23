@@ -11,7 +11,7 @@
 namespace mk {
 	class Encoder {
 	public:
-		Encoder(std::string, std::string, bool);
+		Encoder(std::string, bool);
 		void split();
 		void encode();
 		void stitch();
@@ -19,8 +19,7 @@ namespace mk {
 		std::unordered_map<int, std::vector<int>> get_nums();
 
 	private:
-		// User provided filename.
-		std::string m_input_filename{};
+		// Input related members..
 		std::string m_input{};
 		const size_t m_size = m_input.size();
 

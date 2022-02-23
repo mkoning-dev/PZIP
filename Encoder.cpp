@@ -3,8 +3,8 @@
 
 namespace mk {
 
-	Encoder::Encoder(std::string input, std::string file, bool single)
-		: m_input{ std::move(input) }, m_input_filename{ file }
+	Encoder::Encoder(std::string input, bool single)
+		: m_input{ std::move(input) }
 	{
 		// In case the file is too small to make use of all threads.
 		// (ex. a 1 byte file split by 4 cores)
@@ -74,6 +74,7 @@ namespace mk {
 
 	void Encoder::encode()
 	{
+
 		std::string s{ "" };
 		auto index = 0;
 		{
