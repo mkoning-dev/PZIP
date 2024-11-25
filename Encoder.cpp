@@ -1,4 +1,5 @@
 #include "Encoder.h"
+#include <cmath>
 #include <iostream>
 
 namespace mk {

@@ -34,7 +34,7 @@ namespace mk {
 		unsigned int m_max_threads = std::thread::hardware_concurrency();
 		unsigned int m_encode_threads = m_max_threads > 2 ? m_max_threads - 1 : 1;
 		std::mutex m_work_lock{};
-		std::counting_semaphore<LLONG_MAX> m_work_available_flag = std::counting_semaphore{ 0 };
+		std::counting_semaphore<INT_MAX> m_work_available_flag = std::counting_semaphore{ 0 };
 		std::vector<std::jthread> m_threads;
 	};
 }
