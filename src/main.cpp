@@ -32,9 +32,9 @@ int main(int argc, char** argv)
 
 		std::string input = mk::File_IO::read_file(filename);
 		if (input.empty()) {
-			std::cout << "The provided file is empty. Nothing to encode." << std::endl;
-			return 1;
-		}
+            std::cout << "Error: The provided file is empty. Nothing to encode." << std::endl;
+            return 1;
+        }
 
 		bool single_thread = false;
 		if (operation == "-e1") {

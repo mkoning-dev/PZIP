@@ -7,6 +7,14 @@ namespace mk {
 	Encoder::Encoder(std::string input, bool single)
 		: m_input{ std::move(input) }
 	{
+		if (m_input.empty())
+		{
+			std::cout << "Encoder received empty input." << std::endl;
+			m_chars.clear();
+			m_nums.clear();
+			return;
+		}
+		
 		// In case the file is too small to make use of all threads.
 		// (ex. a 1 byte file split by 4 cores)
 		if ((m_size / m_encode_threads) < 1) {
@@ -35,10 +43,17 @@ namespace mk {
 			split();
 			encode();
 		}
+		
 	};
 
 	void Encoder::split()
 	{
+		if (m_size == 0)
+		{
+			std::cout << "Input file is empty.\n";
+			return;
+		}
+
 		const auto chunk = m_size / m_encode_threads;
 		const auto first_chunk = chunk + (m_size % m_encode_threads);
 		auto chunk_count = 0;
@@ -81,6 +96,9 @@ namespace mk {
 		{
 			std::lock_guard guard{ m_work_lock };
 			m_work_available_flag.acquire();
+			if (work.empty()) {
+				return;
+			}
 			std::pair<int, std::string> pair = work.front();
 			std::tie(index, s) = pair;
 			// Structured binding: https://en.cppreference.com/w/cpp/language/structured_binding

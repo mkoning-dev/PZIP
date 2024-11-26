@@ -312,6 +312,9 @@ paket-files/
 # FAKE - F# Make
 .fake/
 
+# Ignore the extern directory which holds third-party libraries
+extern/
+
 # CodeRush personal settings
 .cr/personal
 
@@ -374,6 +377,9 @@ FodyWeavers.xsd
 # Ignore build and output directories
 build/
 out/
+
+# Ignore build scripts
+build.bat
 
 # Ignore object and binary files
 *.o
