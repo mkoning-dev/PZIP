@@ -38,7 +38,7 @@ bld/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
-# Visual Code directory
+# VS Code directory
 .vscode/
 
 # Visual Studio 2017 auto generated files
@@ -370,3 +370,14 @@ FodyWeavers.xsd
 /4.txt
 /2.txt
 /1.txt
+
+# Ignore build and output directories
+build/
+out/
+
+# Ignore object and binary files
+*.o
+*.a
+*.so
+*.exe
+*.out
