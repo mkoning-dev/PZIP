@@ -10,13 +10,13 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 include_directories(include)
 
 # Create a shared library (DLL) for PZip
-add_library(pzip SHARED ${SOURCES})
+add_library(pzip_lib SHARED ${SOURCES})
 
 # Add main program for PZip
-add_executable(pzip_main src/main.cpp)
+add_executable(pzip src/main.cpp)
 
 # Link the executable to the shared library
-target_link_libraries(pzip_main PRIVATE pzip)
+target_link_libraries(pzip PRIVATE pzip_lib)
 
 # Add tests (optional)
 enable_testing()
@@ -29,7 +29,7 @@ add_subdirectory(extern/googletest)
 add_executable(EncoderTestExec tests/EncoderTest.cpp)
 
 # Link the test executable to PZip and GoogleTest
-target_link_libraries(EncoderTestExec PRIVATE gtest gtest_main pzip)
+target_link_libraries(EncoderTestExec PRIVATE gtest gtest_main pzip_lib)
 
 # Enable C++11 or later for GoogleTest
 target_compile_features(EncoderTestExec PRIVATE cxx_std_11)
