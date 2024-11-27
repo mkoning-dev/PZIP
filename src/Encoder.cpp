@@ -95,10 +95,10 @@ namespace mk {
 		auto index = 0;
 		{
 			std::lock_guard guard{ m_work_lock };
-			m_work_available_flag.acquire();
 			if (work.empty()) {
 				return;
 			}
+			m_work_available_flag.acquire();
 			std::pair<int, std::string> pair = work.front();
 			std::tie(index, s) = pair;
 			// Structured binding: https://en.cppreference.com/w/cpp/language/structured_binding

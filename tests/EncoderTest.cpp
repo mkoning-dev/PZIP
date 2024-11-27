@@ -30,4 +30,32 @@ namespace mk
         ASSERT_TRUE(chars.empty());
     }
 
+    // Test thread safety by encoding multiple inputs concurrently
+    TEST(EncoderTest, ConcurrentEncoding) {
+        std::atomic<int> success_count(0);
+        std::vector<std::string> inputs = {"aaabbbccc", "xyzxyzxyz", "123123123"};
+
+        auto encoding_task = [&success_count](const std::string& input) {
+            Encoder encoder(input, false);  // Enable multithreading
+            try {
+                encoder.encode();
+                success_count++;
+            } catch (const std::exception& e) {
+                // Handle failure
+            }
+        };
+
+        std::vector<std::thread> threads;
+        for (const auto& input : inputs) {
+            threads.push_back(std::thread(encoding_task, input));
+        }
+
+        for (auto& t : threads) {
+            t.join();
+        }
+
+        // Ensure all tasks completed successfully
+        ASSERT_EQ(success_count, inputs.size());
+    }
+
 } // namespace mk
