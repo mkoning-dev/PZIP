@@ -90,57 +90,57 @@ namespace mk {
 
 	void Encoder::encode()
 	{
-
-		std::string s{ "" };
-		auto index = 0;
-		{
-			std::lock_guard guard{ m_work_lock };
-			if (work.empty()) {
-				return;
+		while (true) {
+			std::string s{ "" };
+			auto index = 0;
+			{
+				std::lock_guard guard{ m_work_lock };
+				if (work.empty()) {
+					return;
+				}
+				m_work_available_flag.acquire();
+				std::pair<int, std::string> pair = work.front();
+				std::tie(index, s) = pair;
+				// Structured binding: https://en.cppreference.com/w/cpp/language/structured_binding
+				// const auto [index, s] = work.front();
+				work.pop();
 			}
-			m_work_available_flag.acquire();
-			std::pair<int, std::string> pair = work.front();
-			std::tie(index, s) = pair;
-			// Structured binding: https://en.cppreference.com/w/cpp/language/structured_binding
-			// const auto [index, s] = work.front();
-			work.pop();
-		}
 
-		auto count = 0;
-		auto tmp = s[0];
-		std::vector<int> tmp_num_vec{};
-		std::vector<char> tmp_char_vec{};
-		tmp_num_vec.clear();
-		tmp_char_vec.clear();
+			auto count = 0;
+			auto tmp = s[0];
+			std::vector<int> tmp_num_vec{};
+			std::vector<char> tmp_char_vec{};
+			tmp_num_vec.clear();
+			tmp_char_vec.clear();
 
-		const auto chunk_length = s.length();
-		constexpr auto ratio = 0.25;
-		const auto chunk_reserve = static_cast<std::size_t>(chunk_length * ratio);
-		tmp_num_vec.reserve(chunk_reserve);
-		tmp_char_vec.reserve(chunk_reserve);
+			const auto chunk_length = s.length();
+			constexpr auto ratio = 0.25;
+			const auto chunk_reserve = static_cast<std::size_t>(chunk_length * ratio);
+			tmp_num_vec.reserve(chunk_reserve);
+			tmp_char_vec.reserve(chunk_reserve);
 
-		for (int i = 0; i < chunk_length; ++i) {
-			if (tmp == s[i]) {
-				count++;
+			for (int i = 0; i < chunk_length; ++i) {
+				if (tmp == s[i]) {
+					count++;
+				}
+				else {
+					tmp_num_vec.push_back(count);
+					tmp_char_vec.push_back(tmp);
+					tmp = s[i];
+					count = 1;
+				}
 			}
-			else {
+			{
 				tmp_num_vec.push_back(count);
 				tmp_char_vec.push_back(tmp);
-				tmp = s[i];
-				count = 1;
+				count = 0;
+			}
+			{
+				std::lock_guard guard{ m_work_lock };
+				m_nums.insert({ index, tmp_num_vec });
+				m_chars.insert({ index, tmp_char_vec });
 			}
 		}
-		{
-			tmp_num_vec.push_back(count);
-			tmp_char_vec.push_back(tmp);
-			count = 0;
-		}
-		{
-			std::lock_guard guard{ m_work_lock };
-			m_nums.insert({ index, tmp_num_vec });
-			m_chars.insert({ index, tmp_char_vec });
-		}
-
 	}
 
 	void Encoder::stitch()
