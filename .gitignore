@@ -380,6 +380,7 @@ out/
 
 # Ignore build scripts
 build.bat
+build.sh
 
 # Ignore object and binary files
 *.o
