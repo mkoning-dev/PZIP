@@ -40,11 +40,11 @@ std::vector<char> flatten_chars(const std::unordered_map<int, std::vector<char>>
         std::string input = "aaabbbccc";
         Encoder encoder(input, true); // Single thread for simplicity
 
-        auto nums = encoder.get_nums();
-        auto chars = encoder.get_chars();
+        const auto &nums = flatten_nums(encoder.get_nums());
+        const auto &chars = flatten_chars(encoder.get_chars());
 
-        ASSERT_EQ(nums[0], std::vector<int>({3, 3, 3}));
-        ASSERT_EQ(chars[0], std::vector<char>({'a', 'b', 'c'}));
+        ASSERT_EQ(nums, std::vector<int>({3, 3, 3}));
+        ASSERT_EQ(chars, std::vector<char>({'a', 'b', 'c'}));
     }
 
     // Test that the Encoder correctly handles an empty string
@@ -53,8 +53,8 @@ std::vector<char> flatten_chars(const std::unordered_map<int, std::vector<char>>
         std::string input = "";
         Encoder encoder(input, true); // Single thread for simplicity
 
-        auto nums = encoder.get_nums();
-        auto chars = encoder.get_chars();
+        const auto &nums = flatten_nums(encoder.get_nums());
+        const auto &chars = flatten_chars(encoder.get_chars());
 
         ASSERT_TRUE(nums.empty());
         ASSERT_TRUE(chars.empty());
@@ -167,8 +167,8 @@ std::vector<char> flatten_chars(const std::unordered_map<int, std::vector<char>>
         std::atomic<int> access_count(0);
         auto access_task = [&encoder, &access_count]()
         {
-            auto nums = flatten_nums(encoder.get_nums());
-    auto chars = flatten_chars(encoder.get_chars());
+            const auto &nums = flatten_nums(encoder.get_nums());
+            const auto &chars = flatten_chars(encoder.get_chars());
             if (!nums.empty() && !chars.empty())
             {
                 access_count++;
@@ -195,8 +195,8 @@ std::vector<char> flatten_chars(const std::unordered_map<int, std::vector<char>>
         std::string input(100, 'x');   // 100 'x' characters
         Encoder encoder(input, false); // Multithreaded
 
-        auto nums = flatten_nums(encoder.get_nums());
-    auto chars = flatten_chars(encoder.get_chars());
+        const auto &nums = flatten_nums(encoder.get_nums());
+        const auto &chars = flatten_chars(encoder.get_chars());
 
         ASSERT_EQ(nums, std::vector<int>({100}));
         ASSERT_EQ(chars, std::vector<char>({'x'}));
@@ -208,15 +208,11 @@ std::vector<char> flatten_chars(const std::unordered_map<int, std::vector<char>>
         std::string input = "abababababab";
         Encoder encoder(input, false); // Multithreaded
 
-        // auto nums = encoder.get_nums();
-        // auto chars = encoder.get_chars();
+        const auto &nums = flatten_nums(encoder.get_nums());
+        const auto &chars = flatten_chars(encoder.get_chars());
 
-        // Flatten the results
-    auto flat_nums = flatten_nums(encoder.get_nums());
-    auto flat_chars = flatten_chars(encoder.get_chars());
-
-        ASSERT_EQ(flat_nums, std::vector<int>({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));
-        ASSERT_EQ(flat_chars, std::vector<char>({'a', 'b', 'a', 'b', 'a', 'b', 'a', 'b', 'a', 'b', 'a', 'b'}));
+        ASSERT_EQ(nums, std::vector<int>({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));
+        ASSERT_EQ(chars, std::vector<char>({'a', 'b', 'a', 'b', 'a', 'b', 'a', 'b', 'a', 'b', 'a', 'b'}));
     }
 
     // Test that adjacent chunks are stitched together correctly
@@ -225,8 +221,8 @@ std::vector<char> flatten_chars(const std::unordered_map<int, std::vector<char>>
         std::string input = "aaaabbbbccccddd";
         Encoder encoder(input, false); // Multithreaded
 
-        auto nums = flatten_nums(encoder.get_nums());
-    auto chars = flatten_chars(encoder.get_chars());
+        const auto &nums = flatten_nums(encoder.get_nums());
+        const auto &chars = flatten_chars(encoder.get_chars());
 
         // After stitching, we should see a single contiguous encoding
         ASSERT_EQ(nums, std::vector<int>({4, 4, 4, 3}));
